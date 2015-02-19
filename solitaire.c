@@ -232,30 +232,30 @@ main (int argc, char *argv[])
 	char c;
 
 	time_t t;
-	srand((unsigned) time(&t));
+	srand ((unsigned) time(&t));
 
-	initscr();
-	start_color();
+	initscr ();
+	start_color ();
 
-	cbreak();
+	cbreak ();
 	//noecho();
-	start_color();
-	init_pair(1, COLOR_CYAN, COLOR_BLACK);
-	init_pair(2, COLOR_RED, COLOR_WHITE);
-	init_pair(3, COLOR_BLACK, COLOR_WHITE);
+	start_color ();
+	init_pair (1, COLOR_CYAN, COLOR_BLACK);
+	init_pair (2, COLOR_RED, COLOR_WHITE);
+	init_pair (3, COLOR_BLACK, COLOR_WHITE);
 
-	clear_board();
+	clear_board ();
 
 	p_deck = create_deck ();
 	shuffle (p_deck, 52);
 	deal (p_deck);
 
-	print_board	();
+	print_board ();
 	refresh ();
 
 	while (c != 27)
 	{
-		c = getch();
+		c = getch ();
 		switch (c)
 		{
 			case 'a':
@@ -297,7 +297,7 @@ main (int argc, char *argv[])
 	}
 
 	free_deck (p_deck);
-	endwin();
+	endwin ();
 
 	return 0;
 }
