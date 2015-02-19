@@ -295,39 +295,6 @@ main (int argc, char *argv[])
 		print_board	();
 		refresh ();
 	}
-	// //while (scanf ("%c%c\n",&k1,&k2))
-	// {
-	// 	if (k1 == 't'
-	// 		&& k2 == 't')
-	// 	{
-	// 		turn ();
-	// 	}
-	// 	else
-	// 	{
-	// 		p_s = map (k1);
-	// 		p_d = map (k2);
-	// 	//	play (p_s, p_d);
-	// 	}
-	// 	print_board	();
-	// 	refresh ();
-	// }
-	/*
-	for (i = 0; i < 52; i++)
-	{
-		print_card (&deck[i]);
-		printw ("\n");
-	}
-
-	printw ("shuffle:\n");
-	shuffle (deck, 52);
-
-		for (i = 0; i < 52; i++)
-	{
-		print_card (&deck[i]);
-		printw ("\n");
-	}
-*/
-
 
 	free_deck (p_deck);
 	endwin();
