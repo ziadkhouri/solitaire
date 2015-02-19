@@ -63,11 +63,8 @@ print_board ()
 	print_stack (&board[HC]);
 	move (14, 0);
 	print_stack (&board[HO]);
-	//print_card (peek (&p_b->ho));
 	move (15, 0);
 	printw ("");
-//	move (16, 0);
-//	printw (">>>");
 	return;
 }
 
@@ -226,6 +223,7 @@ int
 main (int argc, char *argv[])
 {
 	CARD *p_deck;
+	STACK *p_cur = NULL;
 	STACK *p_src = NULL;
 	STACK *p_dst = NULL;
 
@@ -236,10 +234,7 @@ main (int argc, char *argv[])
 
 	initscr ();
 	start_color ();
-
 	cbreak ();
-	//noecho();
-	start_color ();
 	init_pair (1, COLOR_CYAN, COLOR_BLACK);
 	init_pair (2, COLOR_RED, COLOR_WHITE);
 	init_pair (3, COLOR_BLACK, COLOR_WHITE);
@@ -259,34 +254,31 @@ main (int argc, char *argv[])
 		switch (c)
 		{
 			case 'a':
+			if (p_src)
+			{
+				p_src->isSelected = false;
+				p_src = NULL;
+			}
 			turn ();
 			break;
 
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case 'q':
-			case 'w':
-			case 'e':
-			case 'r':
-			case 't':
-			case 'y':
-			case 'u':
-			case 's':
-				if (!p_src)
+			default:
+				if ((p_cur = map (c)))
 				{
-					p_src = map (c);
-					p_src->isSelected = true;
-				}
-				else
-				{
-					p_dst = map (c);
-					if (p_dst == p_src
-						|| play(p_dst, p_src))
+					if (!p_src)
 					{
-						p_src->isSelected = false;
-						p_src = NULL;
+						p_src = p_cur;
+						p_src->isSelected = true;
+					}
+					else
+					{
+						p_dst = p_cur;
+						if (p_dst == p_src
+							|| play(p_dst, p_src))
+						{
+							p_src->isSelected = false;
+							p_src = NULL;
+						}
 					}
 				}
 				break;
