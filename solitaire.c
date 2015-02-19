@@ -9,16 +9,6 @@
 #include "card.h"
 #include "stack.h"
 
-/*
-TODO:
-scanf is bollocks
-implement move function
-implement validate() function pointer
-ncurses
-multifile 
-*/
-
-
 char key_map[] = {"1234qwertyuas"};
 enum keys
 {
