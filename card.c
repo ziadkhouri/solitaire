@@ -62,9 +62,9 @@ print_card (CARD *p_c)
 
 	if (p_c->isOpen)
 	{
-		attron (A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
+		attron (COLOR_PAIR(p_c->suit % 2 + 2));
 		printw ("%c%lc", face[p_c->face], suit[p_c->suit]);
-		attroff (A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
+		attroff (COLOR_PAIR(p_c->suit % 2 + 2));
 	}
 	else
 	{
