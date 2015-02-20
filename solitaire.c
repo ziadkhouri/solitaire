@@ -52,11 +52,11 @@ print_board ()
 	printw ("------");
 	move (8, 0);
 	print_stack (&board[O1]);
-	move (8, 5);
+	move (8, 8);
 	print_stack (&board[O2]);
-	move (8, 10);
+	move (8, 16);
 	print_stack (&board[O3]);
-	move (8, 15);
+	move (8, 24);
 	print_stack (&board[O4]);
 	move (9, 0);
 	printw ("------");
