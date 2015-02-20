@@ -5,11 +5,12 @@
 #include <time.h>
 #include <math.h>
 #include <ncurses.h>
+#include <locale.h>
 
 #include "card.h"
 #include "stack.h"
 
-char key_map[] = {"1234qwertyuas"};
+char key_map[] = {"qwer1234567as"};
 enum keys
 {
 	O1 = 0,
@@ -34,36 +35,37 @@ print_board ()
 {	
 	erase ();
 	move (0, 0);
-	print_stack (&board[O1]);
-	move (1, 0);
-	print_stack (&board[O2]);
-	move (2, 0);
-	print_stack (&board[O3]);
-	move (3, 0);
-	print_stack (&board[O4]);
-	move (4, 0);
-	printw ("------");
-	move (5, 0);
 	print_stack (&board[S1]);
-	move (6, 0);
+	move (1, 0);
 	print_stack (&board[S2]);
-	move (7, 0);
+	move (2, 0);
 	print_stack (&board[S3]);
-	move (8, 0);
+	move (3, 0);
 	print_stack (&board[S4]);
-	move (9, 0);
+	move (4, 0);
 	print_stack (&board[S5]);
-	move (10, 0);
+	move (5, 0);
 	print_stack (&board[S6]);
-	move (11, 0);
+	move (6, 0);
 	print_stack (&board[S7]);
-	move (12, 0);
+	move (7, 0);
 	printw ("------");
-	move (13, 0);
+	move (8, 0);
+	print_stack (&board[O1]);
+	move (8, 5);
+	print_stack (&board[O2]);
+	move (8, 10);
+	print_stack (&board[O3]);
+	move (8, 15);
+	print_stack (&board[O4]);
+	move (9, 0);
+	printw ("------");
+
+	move (10, 0);
 	print_stack (&board[HC]);
-	move (14, 0);
+	move (11, 0);
 	print_stack (&board[HO]);
-	move (15, 0);
+	move (12, 0);
 	printw ("");
 	return;
 }
@@ -213,6 +215,11 @@ clear_board ()
 	board[HC].validate = &always_false;
 	board[HO].validate = &always_false;
 
+	board[O1].isHeap = true;
+	board[O2].isHeap = true;
+	board[O3].isHeap = true;
+	board[O4].isHeap = true;
+
 	for (i = 0; i < 13; i++)
 		board[i].key = key_map[i];
 
@@ -230,7 +237,8 @@ main (int argc, char *argv[])
 	char c;
 
 	time_t t;
-	srand ((unsigned) time(&t));
+	srand ((unsigned) time (&t));
+	setlocale (LC_ALL, "");
 
 	initscr ();
 	start_color ();

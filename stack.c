@@ -41,9 +41,20 @@ print_stack (STACK *p_s)
 {
 	int i;
 	printw ("%c:", p_s->key);
-	for (i = 0; i < p_s->top; i++)
-		print_card (p_s->p_cards[i]);
-
 	if (p_s->isSelected)
+		attron (A_BLINK);
+	if (p_s->isHeap)
+	{
+		print_card (peek (p_s));
+	}
+	else
+	{
+		for (i = 0; i < p_s->top; i++)
+			print_card (p_s->p_cards[i]);
+	}
+	if (p_s->isSelected)
+	{
+		attroff (A_BLINK);
 		printw (" <");
+	}
 }

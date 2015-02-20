@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS  = -Wall
 SRCS = *.c
-LDFLAGS = -lncurses
+LDFLAGS = -lncursesw
 EXE=solitaire.exe
 
 all:

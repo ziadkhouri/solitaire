@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ncurses.h>
+//#include <locale.h>
+
 #include "card.h"
 
 CARD *
@@ -52,21 +54,23 @@ void
 print_card (CARD *p_c)
 {
 	char face[] = "A23456789TJQK";
-	char suit[] = "hcds";
+	//char suit[] = "hcds";
+	wchar_t suit[] = L"\u2665\u2660\u2666\u2663";
+
 
 	if (!p_c) return;
 
 	if (p_c->isOpen)
 	{
-		attron(A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
-		printw ("%c%c", suit[p_c->suit], face[p_c->face]);
-		attroff(A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
+		attron (A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
+		printw ("%c%lc", face[p_c->face], suit[p_c->suit]);
+		attroff (A_BOLD | COLOR_PAIR(p_c->suit % 2 + 2));
 	}
 	else
 	{
-		attron(COLOR_PAIR(1));
+		attron (COLOR_PAIR(1));
 		printw ("[]");
-		attroff(COLOR_PAIR(1));
+		attroff (COLOR_PAIR(1));
 	}
 	return;
 }

@@ -10,6 +10,7 @@ typedef struct _STACK
 	int top;
 	char key;
 	bool isSelected;
+	bool isHeap;
 	//function pointer valdate()
 	bool (*validate) (CARD *, CARD *);
 } STACK;
