@@ -1,5 +1,5 @@
 #ncurses solitaire
 
 - run: make
-- needs ncursesw 
+- needs ncurses
 - ESC to quit
