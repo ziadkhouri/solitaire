@@ -34,6 +34,7 @@ free_deck (CARD *p_deck)
 	return;
 }
 
+//Fisher–Yates shuffle
 CARD *
 shuffle (CARD *p_deck, int size)
 {

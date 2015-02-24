@@ -25,10 +25,11 @@ enum keys
 	S6,
 	S7,
 	HC,
-	HO
+	HO,
+	TT //cannot be played
 };
 
-STACK board[13];
+STACK board[14];
 
 void
 print_board ()
@@ -142,6 +143,8 @@ play (STACK *p_dst, STACK *p_src)
 	{
 		pop (p_src);
 		push (p_dst, p_s);
+		//push ptmp
+
 		p_s = peek (p_src);
 		if (p_s)
 			p_s->isOpen = true;
@@ -215,10 +218,10 @@ clear_board ()
 	board[HC].validate = &always_false;
 	board[HO].validate = &always_false;
 
-	board[O1].isHeap = true;
-	board[O2].isHeap = true;
-	board[O3].isHeap = true;
-	board[O4].isHeap = true;
+	board[O1].isPile = true;
+	board[O2].isPile = true;
+	board[O3].isPile = true;
+	board[O4].isPile = true;
 
 	for (i = 0; i < 13; i++)
 		board[i].key = key_map[i];
@@ -281,9 +284,14 @@ main (int argc, char *argv[])
 					else
 					{
 						p_dst = p_cur;
-						if (p_dst == p_src
-							|| play(p_dst, p_src))
+						if (p_dst == p_src)
 						{
+							//select in stack
+							//(push to ptmp)
+						}
+						else
+						{
+							play(p_dst, p_src);
 							p_src->isSelected = false;
 							p_src = NULL;
 						}

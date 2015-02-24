@@ -43,7 +43,7 @@ print_stack (STACK *p_s)
 	printw ("%c:", p_s->key);
 	if (p_s->isSelected)
 		attron (A_BLINK);
-	if (p_s->isHeap)
+	if (p_s->isPile)
 	{
 		print_card (peek (p_s));
 	}
