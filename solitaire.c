@@ -26,7 +26,7 @@ enum keys
 	S7,
 	HC,
 	HO,
-	TT //cannot be played
+	TT 		//hidden. used for moving piles
 };
 
 STACK board[14];
@@ -105,64 +105,6 @@ deal (CARD *p_deck)
 	return;
 }
 
-void
-turn ()
-{
-	CARD *p_c, *p_t;
-	p_c = pop (&board[HC]);
-	if (!p_c)
-	{
-		p_t = pop (&board[HO]);
-		while (p_t)
-		{
-			p_t->isOpen = false;
-			push (&board[HC], p_t);
-			p_t = pop (&board[HO]);
-		}
-	}
-	else
-	{
-		if ((p_t = peek (&board[HO])))
-			p_t->isOpen = false;
-
-		p_c->isOpen = true;
-		push (&board[HO], p_c);
-	}
-
-	return;
-}
-
-bool
-play (STACK *p_dst, STACK *p_src)
-{
-	CARD *p_s, *p_d;
-	p_s = peek (p_src);
-	p_d = peek (p_dst);
-
-	if ((*p_dst->validate)(p_d, p_s))
-	{
-		pop (p_src);
-		push (p_dst, p_s);
-		//push ptmp
-
-		p_s = peek (p_src);
-		if (p_s)
-			p_s->isOpen = true;
-		return true;
-	}
-
-	return false;
-}
-
-STACK *
-map (char c)
-{	
-	char *o = strchr (key_map, c);
-	if (o != '\0')
-		return &board[o - key_map];
-
-	return NULL;
-}
 
 bool
 diff_colour_desc (CARD *p_d, CARD *p_s)
@@ -196,27 +138,100 @@ always_false (CARD *p_d, CARD *p_s)
 	return false;
 }
 
+void
+turn ()
+{
+	CARD *p_c, *p_t;
+	p_c = pop (&board[HC]);
+	if (!p_c)
+	{
+		p_t = pop (&board[HO]);
+		while (p_t)
+		{
+			p_t->isOpen = false;
+			push (&board[HC], p_t);
+			p_t = pop (&board[HO]);
+		}
+	}
+	else
+	{
+		if ((p_t = peek (&board[HO])))
+			p_t->isOpen = false;
+
+		p_c->isOpen = true;
+		push (&board[HO], p_c);
+	}
+
+	return;
+}
+
+bool
+play (STACK *p_dst, STACK *p_src)
+{
+	CARD *p_s, *p_d;
+	p_s = selected (p_src);
+	p_d = peek (p_dst);
+
+	if ((*p_dst->action)(p_d, p_s))
+	{			
+		if (p_d
+			&& p_dst->isPile)
+				p_d->isOpen = false;
+
+		while (p_src->top >= p_src->selected
+				&& (p_s = pop(p_src))
+			)
+		{
+			if (p_dst->isPile)
+				p_s->isOpen = false;
+			push (&board[TT], p_s);
+		}
+
+		while ((p_d = pop (&board[TT])))
+			push (p_dst, p_d);
+
+		if ((p_d = peek (p_dst)))
+			p_d->isOpen = true;
+
+		if ((p_s = peek (p_src)))
+			p_s->isOpen = true;
+		return true;
+	}
+
+	return false;
+}
+
+STACK *
+map (char c)
+{	
+	char *o = strchr (key_map, c);
+	if (o != '\0')
+		return &board[o - key_map];
+
+	return NULL;
+}
+
 void 
 clear_board ()
 {
 	int i;
 	memset (&board, 0, sizeof (board));
 
-	board[S1].validate = &diff_colour_desc;
-	board[S2].validate = &diff_colour_desc;
-	board[S3].validate = &diff_colour_desc;
-	board[S4].validate = &diff_colour_desc;
-	board[S5].validate = &diff_colour_desc;
-	board[S6].validate = &diff_colour_desc;
-	board[S7].validate = &diff_colour_desc;
+	board[S1].action = &diff_colour_desc;
+	board[S2].action = &diff_colour_desc;
+	board[S3].action = &diff_colour_desc;
+	board[S4].action = &diff_colour_desc;
+	board[S5].action = &diff_colour_desc;
+	board[S6].action = &diff_colour_desc;
+	board[S7].action = &diff_colour_desc;
 
-	board[O1].validate = &same_suit_asc;
-	board[O2].validate = &same_suit_asc;
-	board[O3].validate = &same_suit_asc;
-	board[O4].validate = &same_suit_asc;
+	board[O1].action = &same_suit_asc;
+	board[O2].action = &same_suit_asc;
+	board[O3].action = &same_suit_asc;
+	board[O4].action = &same_suit_asc;
 
-	board[HC].validate = &always_false;
-	board[HO].validate = &always_false;
+	board[HC].action = &always_false;
+	board[HO].action = &always_false;
 
 	board[O1].isPile = true;
 	board[O2].isPile = true;
@@ -267,7 +282,7 @@ main (int argc, char *argv[])
 			case 'a':
 			if (p_src)
 			{
-				p_src->isSelected = false;
+				unselect (p_src);
 				p_src = NULL;
 			}
 			turn ();
@@ -279,20 +294,21 @@ main (int argc, char *argv[])
 					if (!p_src)
 					{
 						p_src = p_cur;
-						p_src->isSelected = true;
+						select (p_src);
 					}
 					else
 					{
 						p_dst = p_cur;
 						if (p_dst == p_src)
 						{
+							select (p_src);
 							//select in stack
 							//(push to ptmp)
 						}
 						else
 						{
 							play(p_dst, p_src);
-							p_src->isSelected = false;
+							unselect (p_src);
 							p_src = NULL;
 						}
 					}
