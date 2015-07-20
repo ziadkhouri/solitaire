@@ -252,7 +252,7 @@ main (int argc, char *argv[])
 	STACK *p_src = NULL;
 	STACK *p_dst = NULL;
 
-	char c;
+	char c = ' ';
 
 	time_t t;
 	srand ((unsigned) time (&t));
